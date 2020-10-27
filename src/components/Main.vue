@@ -41,5 +41,7 @@
 </script>
 
 <style>
-
+.isDone {
+    text-decoration: line-through;
+}
 </style>
