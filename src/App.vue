@@ -4,9 +4,18 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
-    <router-view/>
+
+    <Main></Main>
   </div>
 </template>
+<script>
+import Main from "./components/Main";
+export default {
+  components: {
+    Main
+  },
+}
+</script>
 
 <style>
 #app {
