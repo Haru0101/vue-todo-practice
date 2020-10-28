@@ -28,6 +28,8 @@
                     item: this.newItem,
                     isDone: false
                 }
+                localStorage.setItem('tasks', JSON.stringify(task));
+                console.log('localStorage');
                 this.tasks.push(task);
                 this.newItem = null;
             },
