@@ -25,6 +25,7 @@
                 if (this.newItem == null) return;
                 // オブジェクトをプッシュするときは変数に入れるとスッキリする
                 var task = {
+                    id: this.tasks.length + 1,
                     item: this.newItem,
                     isDone: false
                 }
