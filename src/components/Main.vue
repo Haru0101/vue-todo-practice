@@ -4,6 +4,7 @@
         <!-- 送信して違うページに行かないようにサブミットを制御 -->
         <form v-on:submit.prevent>
             <input type="text" v-model="newItem"><button @click="addItem">Add</button>
+            {{this.tasks}}
             <ul>
                 <li v-for="(task, index) in tasks" :class="{'isDone': task.isDone}" :key="index"><input type="checkbox"
                         v-model="task.isDone">{{ task.item }}<button @click="deleteItem(index)">Delete</button></li>
@@ -19,6 +20,9 @@
                 newItem: null,
                 tasks: [],
             }
+        },
+        mounted() {
+            this.fetchItem();
         },
         methods: {
             addItem: function () {
@@ -42,6 +46,7 @@
             },
             fetchItem: function (){
                 // ローカルストレージからアイテムをフェッチする関数
+                this.tasks = localStorage.tasks;
             }
         }
     }
