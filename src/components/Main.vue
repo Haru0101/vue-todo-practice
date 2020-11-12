@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>TODO LIST</h1>
+        <!-- <h1>TODO LIST</h1> -->
         <!-- 送信して違うページに行かないようにサブミットを制御 -->
         <form v-on:submit.prevent>
             <input type="text" v-model="newItem"><button @click="addItem">Add</button>
@@ -29,9 +29,10 @@
                     item: this.newItem,
                     isDone: false
                 }
-                localStorage.setItem('tasks', JSON.stringify(task));
-                console.log('localStorage');
+                
                 this.tasks.push(task);
+                localStorage.setItem('tasks', JSON.stringify(this.tasks));
+                console.log(localStorage);
                 this.newItem = null;
             },
             deleteItem: function (index) {
