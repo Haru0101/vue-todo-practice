@@ -7,7 +7,7 @@
             {{this.tasks}}
             <ul>
                 <li v-for="(task, index) in tasks" :class="{'isDone': task.isDone}" :key="index"><input type="checkbox"
-                        v-model="task.isDone">{{ task.item }}<button @click="deleteItem(index)">Delete</button></li>
+                        v-model="task.isDone">{{ task["item"] }}<button @click="deleteItem(index)">Delete</button></li>
             </ul>
         </form>
     </div>
@@ -46,7 +46,7 @@
             },
             fetchItem: function (){
                 // ローカルストレージからアイテムをフェッチする関数
-                this.tasks = localStorage.tasks;
+                this.tasks = JSON.parse(localStorage.tasks);
             }
         }
     }
