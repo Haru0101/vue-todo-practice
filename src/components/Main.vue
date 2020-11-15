@@ -5,10 +5,17 @@
         <form v-on:submit.prevent>
             <input type="text" v-model="newItem"><button @click="addItem">Add</button>
             {{this.tasks}}
+            <h2>未完了のタスク</h2>
             <ul>
                 <li v-for="(task, index) in tasks" :class="{'isDone': task.isDone}" :key="index"><input type="checkbox"
                         v-model="task.isDone">{{ task["item"] }}<button @click="deleteItem(index)">Delete</button></li>
             </ul>
+            <h2>完了済みのタスク</h2>
+            <ul>
+                <li v-for="(task, index) in tasks" :class="{'isDone': task.isDone}" :key="index"><input type="checkbox"
+                        v-model="task.isDone">{{ task["item"] }}<button @click="delePcommteItem(index)">Delete</button></li>
+            </ul>
+
         </form>
     </div>
 </template>
