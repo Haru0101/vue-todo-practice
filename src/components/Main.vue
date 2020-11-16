@@ -4,14 +4,15 @@
         <!-- 送信して違うページに行かないようにサブミットを制御 -->
         <form v-on:submit.prevent>
             <label for="name">名前</label><input id="name" type="text" v-model="newItem.name"><br>
-            <label for="category">カテゴリ<input type="text" id="category"></label><br>
+            <label for="category">カテゴリ<input type="text" id="category" v-model="newItem.category"></label><br>
+            <label for="deadline">締め切り<input type="text" id="deadline" v-model="newItem.deadline"></label><br>
             <button @click="addItem">Add</button>
             <!-- {{this.tasks}} -->
             <h2>未完了のタスク</h2>
             <ul>
                 <li v-for="task in sortedTaskByStatus" :class="{'isDone': task.isDone}" :key="task.id"><input
-                        type="checkbox" v-model="task.isDone">{{ task.name }}<button
-                        @click="deleteItem(index)">Delete</button></li>
+                        type="checkbox" v-model="task.isDone">{{ task.name }} | {{ task.category }} | {{ task.deadline }}<button
+                        @click="deleteItem(task.id)">Delete</button></li>
             </ul>
             <!-- <h2>完了済みのタスク</h2>
             <ul>
@@ -29,7 +30,8 @@
             return {
                 newItem: {
                     name: null,
-                    category: null
+                    category: null,
+                    deadline: null
                 },
                 tasks: [],
             }
@@ -52,6 +54,7 @@
                     id: this.tasks.length + 1,
                     name: this.newItem.name,
                     category: this.newItem.category,
+                    deadline: this.newItem.deadline,
                     isDone: false
                 }
 
@@ -60,18 +63,23 @@
                 console.log(localStorage);
                 this.newItem.name = null;
                 this.newItem.category = null;
+                this.newItem.deadline = null;
                 this.fetchItem();
             },
-            deleteItem: function (index) {
+            deleteItem: function (id) {
                 console.log('deleteItem');
                 // 第一引数：削除を開始する位置
                 // 第二引数：削除する数
-                this.tasks.splice(index, 1);
+                this.tasks.splice(id - 1, 1);
+                localStorage.setItem('tasks', JSON.stringify(this.tasks));
             },
             fetchItem: function () {
                 console.log('fetchItem');
+                console.log(localStorage.length);
                 // ローカルストレージからアイテムをフェッチする関数
-                this.tasks = JSON.parse(localStorage.tasks);
+                if(localStorage.length > 0){
+                    this.tasks = JSON.parse(localStorage.tasks);
+                }
             },
             resetStorage: function () {
                 localStorage.clear();
