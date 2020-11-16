@@ -10,10 +10,11 @@
             <!-- {{this.tasks}} -->
             <h2>未完了のタスク</h2>
             <ul>
-                <li v-for="task in sortedTaskByStatus" :class="{'isDone': task.isDone}" :key="task.id"><input
+                <li v-for="(task, index) in sortedTaskByStatus" :class="{'isDone': task.isDone}" :key="index"><input
                         type="checkbox" v-model="task.isDone">{{ task.name }} | {{ task.category }} | {{ task.deadline }}<button
                         @click="deleteItem(task.id)">Delete</button></li>
             </ul>
+            {{this.tasks}}
             <!-- <h2>完了済みのタスク</h2>
             <ul>
                 <li v-for="(task, index) in tasks" :class="{'isDone': task.isDone}" :key="index"><input type="checkbox"
@@ -39,6 +40,9 @@
         mounted() {
             this.fetchItem();
         },
+        updated() {
+            this.updateStorage();
+        },
         computed: {
             sortedTaskByStatus() {
                 return this.tasks.slice().sort((a, b) => {
@@ -48,30 +52,32 @@
         },
         methods: {
             addItem: function () {
-                if (this.newItem == null) return;
+                if (this.newItem.name == null) return;
                 // オブジェクトをプッシュするときは変数に入れるとスッキリする
-                var task = {
+                let task = {
                     id: this.tasks.length + 1,
                     name: this.newItem.name,
                     category: this.newItem.category,
                     deadline: this.newItem.deadline,
                     isDone: false
-                }
+                };
 
                 this.tasks.push(task);
-                localStorage.setItem('tasks', JSON.stringify(this.tasks));
+                console.log(this.tasks);
+                // this.updateStorage();
                 console.log(localStorage);
                 this.newItem.name = null;
                 this.newItem.category = null;
                 this.newItem.deadline = null;
                 this.fetchItem();
             },
-            deleteItem: function (id) {
+            deleteItem: function (index) {
                 console.log('deleteItem');
                 // 第一引数：削除を開始する位置
                 // 第二引数：削除する数
-                this.tasks.splice(id - 1, 1);
-                localStorage.setItem('tasks', JSON.stringify(this.tasks));
+                console.log(index);
+                this.tasks.splice(index, 1);
+                // this.updateStorage();
             },
             fetchItem: function () {
                 console.log('fetchItem');
@@ -85,8 +91,9 @@
                 localStorage.clear();
                 this.fetchItem();
             },
-            resetInput: function () {
-
+            updateStorage: function () {
+                console.log('updateStorage');
+                localStorage.setItem('tasks', JSON.stringify(this.tasks));
             }
         }
     }
