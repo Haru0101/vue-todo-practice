@@ -55,7 +55,7 @@
                 if (this.newItem.name == null) return;
                 // オブジェクトをプッシュするときは変数に入れるとスッキリする
                 let task = {
-                    id: this.tasks.length + 1,
+                    id: localStorage.length + 1,
                     name: this.newItem.name,
                     category: this.newItem.category,
                     deadline: this.newItem.deadline,
