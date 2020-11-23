@@ -7,18 +7,19 @@
             <label for="category">カテゴリ<input type="text" id="category" v-model="newItem.category"></label><br>
             <label for="deadline">締め切り<input type="text" id="deadline" v-model="newItem.deadline"></label><br>
             <button @click="addItem">Add</button>
-            <!-- {{this.tasks}} -->
+            <!-- {{this.items}} -->
             <h2>未完了のタスク</h2>
             <ul>
-                <li v-for="task in sortedTaskByStatus" :class="{'isDone': task.isDone}" :key="task.id"><input
-                        type="checkbox" v-model="task.isDone" @change="updateStorage()">{{ task.name }} | {{ task.category }} |
-                    {{ task.deadline }}<button @click="deleteItem(task.id)">Delete</button></li>
+                <li v-for="item in sortedItemByStatus" :class="{'isDone': item.isDone}" :key="item.id"><input
+                        type="checkbox" v-model="item.isDone" @change="updateStorage()">{{ item.name }} |
+                    {{ item.category }} |
+                    {{ item.deadline }}<button @click="deleteItem(item.id)">Delete</button></li>
             </ul>
             <pre>{{$data}}</pre>
             <!-- <h2>完了済みのタスク</h2>
             <ul>
-                <li v-for="(task, index) in tasks" :class="{'isDone': task.isDone}" :key="index"><input type="checkbox"
-                        v-model="task.isDone">{{ task["item"] }}<button @click="delePcommteItem(index)">Delete</button></li>
+                <li v-for="(item, index) in items" :class="{'isDone': item.isDone}" :key="index"><input type="checkbox"
+                        v-model="item.isDone">{{ item["item"] }}<button @click="delePcommteItem(index)">Delete</button></li>
             </ul> -->
             <button v-on:click="deleteTodoChecked()">チェック済みの項目を削除する</button>
             <button @click="resetStorage()">リセット</button>
@@ -35,7 +36,7 @@
                     category: null,
                     deadline: null
                 },
-                tasks: [],
+                items: [],
             }
         },
         mounted() {
@@ -45,8 +46,8 @@
             this.updateStorage();
         },
         computed: {
-            sortedTaskByStatus() {
-                return this.tasks.slice().sort((a, b) => {
+            sortedItemByStatus() {
+                return this.items.slice().sort((a, b) => {
                     return (a.isDone < b.isDone) ? -1 : (a.isDone > b.isDone) ? 1 : 0;
                 })
             }
@@ -55,7 +56,7 @@
             addItem: function () {
                 if (this.newItem.name == null) return;
                 // オブジェクトをプッシュするときは変数に入れるとスッキリする
-                let task = {
+                let item = {
                     id: localStorage.length + 1,
                     name: this.newItem.name,
                     category: this.newItem.category,
@@ -63,8 +64,8 @@
                     isDone: false
                 };
 
-                this.tasks.push(task);
-                console.log(this.tasks);
+                this.items.push(item);
+                console.log(this.items);
                 // this.updateStorage();
                 console.log(localStorage);
                 this.newItem.name = null;
@@ -78,15 +79,16 @@
                 // 第一引数：削除を開始する位置
                 // 第二引数：削除する数
                 console.log(id);
-                this.tasks.splice(id, 1);
+                this.items.splice(id, 1);
                 this.updateStorage();
             },
             fetchItem: function () {
                 console.log('fetchItem');
                 console.log(localStorage.length);
                 // ローカルストレージからアイテムをフェッチする関数
-                if (localStorage.length > 0) {
-                    this.tasks = JSON.parse(localStorage.tasks);
+                this.items = JSON.parse(localStorage.getItem('items'));
+                if (!this.items) {
+                    this.items = [];
                 }
             },
             resetStorage: function () {
@@ -95,11 +97,12 @@
             },
             updateStorage: function () {
                 console.log('updateStorage');
-                localStorage.setItem('tasks', JSON.stringify(this.tasks));
+                localStorage.setItem('items', JSON.stringify(this.items));
             },
             deleteTodoChecked: function () {
-                this.tasks = this.tasks.filter(function (tasks) {
-                    return tasks.isChecked === false;
+                // isDoneがtrueのものだけがreturn trueされ、新たな配列として格納される
+                this.items = this.items.filter(function (item) {
+                    return item.isDone === false;
                 });
             }
         }
