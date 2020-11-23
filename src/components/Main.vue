@@ -11,7 +11,7 @@
             <h2>未完了のタスク</h2>
             <ul>
                 <li v-for="task in sortedTaskByStatus" :class="{'isDone': task.isDone}" :key="task.id"><input
-                        type="checkbox" v-model="task.isDone">{{ task.name }} | {{ task.category }} |
+                        type="checkbox" v-model="task.isDone" @change="updateStorage()">{{ task.name }} | {{ task.category }} |
                     {{ task.deadline }}<button @click="deleteItem(task.id)">Delete</button></li>
             </ul>
             <pre>{{$data}}</pre>
@@ -70,6 +70,7 @@
                 this.newItem.name = null;
                 this.newItem.category = null;
                 this.newItem.deadline = null;
+                this.updateStorage();
                 // this.fetchItem();
             },
             deleteItem: function (id) {
@@ -78,7 +79,7 @@
                 // 第二引数：削除する数
                 console.log(id);
                 this.tasks.splice(id, 1);
-                // this.updateStorage();
+                this.updateStorage();
             },
             fetchItem: function () {
                 console.log('fetchItem');
