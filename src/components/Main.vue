@@ -11,15 +11,16 @@
             <h2>未完了のタスク</h2>
             <ul>
                 <li v-for="task in sortedTaskByStatus" :class="{'isDone': task.isDone}" :key="task.id"><input
-                        type="checkbox" v-model="task.isDone">{{ task.name }} | {{ task.category }} | {{ task.deadline }}<button
-                        @click="deleteItem(task.id)">Delete</button></li>
+                        type="checkbox" v-model="task.isDone">{{ task.name }} | {{ task.category }} |
+                    {{ task.deadline }}<button @click="deleteItem(task.id)">Delete</button></li>
             </ul>
-            {{this.tasks}}
+            <pre>{{$data}}</pre>
             <!-- <h2>完了済みのタスク</h2>
             <ul>
                 <li v-for="(task, index) in tasks" :class="{'isDone': task.isDone}" :key="index"><input type="checkbox"
                         v-model="task.isDone">{{ task["item"] }}<button @click="delePcommteItem(index)">Delete</button></li>
             </ul> -->
+            <button v-on:click="deleteTodoChecked()">チェック済みの項目を削除する</button>
             <button @click="resetStorage()">リセット</button>
         </form>
     </div>
@@ -83,7 +84,7 @@
                 console.log('fetchItem');
                 console.log(localStorage.length);
                 // ローカルストレージからアイテムをフェッチする関数
-                if(localStorage.length > 0){
+                if (localStorage.length > 0) {
                     this.tasks = JSON.parse(localStorage.tasks);
                 }
             },
@@ -94,6 +95,11 @@
             updateStorage: function () {
                 console.log('updateStorage');
                 localStorage.setItem('tasks', JSON.stringify(this.tasks));
+            },
+            deleteTodoChecked: function () {
+                this.tasks = this.tasks.filter(function (tasks) {
+                    return tasks.isChecked === false;
+                });
             }
         }
     }
