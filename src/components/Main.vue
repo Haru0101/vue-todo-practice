@@ -33,6 +33,7 @@
                     deadline: null
                 },
                 items: [],
+                completedItems:[]
             }
         },
         mounted() {
