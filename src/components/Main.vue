@@ -11,14 +11,25 @@
             <ul>
                 <template v-for="(item, index) in items">
                     <li :class="{'isDone': item.isDone}" :key="index"><label><input type="checkbox"
-                                v-model="item.isDone" @change="updateStorage()">{{ item.name }} |
+                                v-model="item.isDone" @change="updateStorage(); completeItem()">{{ item.name }} |
                             {{ item.category }} |
                             {{ item.deadline }}</label></li>
                 </template>
             </ul>
-            <button v-on:click="deleteTodoChecked()">チェック済みの項目を削除する</button>
+            <button v-on:click="deleteItemChecked()">チェック済みの項目を削除する</button>
             <button @click="resetStorage()">localStorageリセット</button>
             <pre>{{$data}}</pre>
+
+            <h2>完了済みのタスク</h2>
+            <ul>
+                <template v-for="(completedItem, index) in completedItems">
+                    <li :class="{'isDone': completedItem.isDone}" :key="index"><label><input type="checkbox"
+                                v-model="completedItem.isDone" @change="updateStorage()">{{ completedItem.name }} |
+                            {{ completedItem.category }} |
+                            {{ completedItem.deadline }}</label></li>
+                </template>
+            </ul>
+
         </form>
     </div>
 </template>
@@ -33,7 +44,7 @@
                     deadline: null
                 },
                 items: [],
-                completedItems:[]
+                completedItems: []
             }
         },
         mounted() {
@@ -68,8 +79,12 @@
                 console.log(localStorage.length);
                 // ローカルストレージからアイテムをフェッチする関数
                 this.items = JSON.parse(localStorage.getItem('items'));
+                this.completedItems = JSON.parse(localStorage.getItem('completedItems'));
                 if (!this.items) {
                     this.items = [];
+                }
+                if (!this.completedItems) {
+                    this.completedItems = [];
                 }
             },
             resetStorage: function () {
@@ -79,12 +94,23 @@
             updateStorage: function () {
                 console.log('updateStorage');
                 localStorage.setItem('items', JSON.stringify(this.items));
+                localStorage.setItem('completedItems', JSON.stringify(this.completedItems));
             },
-            deleteTodoChecked: function () {
+            deleteItemChecked: function () {
                 // isDoneがtrueのものだけがreturn trueされ、新たな配列として格納される
                 this.items = this.items.filter(function (item) {
                     return item.isDone === false;
                 });
+            },
+            completeItem: function () {
+                let completedItems = this.items.filter(function (item) {
+                    return item.isDone === true;
+                });
+                for(let i = 0; i < completedItems.length; i++){
+                    this.completedItems.push(completedItems[i]);
+                }
+                this.deleteItemChecked();
+
             }
         }
     }
