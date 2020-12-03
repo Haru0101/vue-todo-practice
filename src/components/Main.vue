@@ -106,11 +106,8 @@
                 let completedItems = this.items.filter(function (item) {
                     return item.isDone === true;
                 });
-                for(let i = 0; i < completedItems.length; i++){
-                    this.completedItems.push(completedItems[i]);
-                }
+                this.completedItems.push(...completedItems);
                 this.deleteItemChecked();
-
             }
         }
     }
