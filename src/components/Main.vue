@@ -1,42 +1,4 @@
-<template>
-    <div>
-        <h1>TODO LIST</h1>
-        <!-- 送信して違うページに行かないようにサブミットを制御 -->
-        <form v-on:submit.prevent>
-            <label for="name">名前</label><input id="name" type="text" v-model="newItem.name">
-            <br>
-            <label for="category">カテゴリ<input type="text" id="category" v-model="newItem.category"></label>
-            <br>
-            <label for="deadline">締め切り<input type="text" id="deadline" v-model="newItem.deadline"></label>
-            <br>
-            <button @click="addItem">Add</button>
-            <h2>未完了のタスク</h2>
-            <ul>
-                <template v-for="(item, index) in items" :key="index">
-                    <li :class="{'isDone': item.isDone}"><label><input type="checkbox" v-model="item.isDone"
-                                @change="updateStorage(); completeItem()">{{ item.name }} |
-                            {{ item.category }} |
-                            {{ item.deadline }}</label></li>
-                </template>
-            </ul>
-            <button v-on:click="deleteItemChecked()">チェック済みの項目を削除する</button>
-            <button @click="resetStorage()">localStorageリセット</button>
-            <pre>{{$data}}</pre>
-
-            <h2>完了済みのタスク</h2>
-            <ul>
-                <template v-for="(completedItem, index) in completedItems" :key="index">
-                    <li :class="{'isDone': completedItem.isDone}"><label><input type="checkbox"
-                                v-model="completedItem.isDone" @change="updateStorage()">{{ completedItem.name }} |
-                            {{ completedItem.category }} |
-                            {{ completedItem.deadline }}</label></li>
-                </template>
-            </ul>
-
-        </form>
-    </div>
-</template>
-<script>
+<script lang="ts">
 import { reactive } from 'vue';
 export default {
     setup() {
@@ -116,3 +78,41 @@ export default {
         text-decoration: line-through;
     }
 </style>
+<template>
+    <div>
+        <h1>TODO LIST</h1>
+        <!-- 送信して違うページに行かないようにサブミットを制御 -->
+        <form v-on:submit.prevent>
+            <label for="name">名前</label><input id="name" type="text" v-model="newItem.name">
+            <br>
+            <label for="category">カテゴリ<input type="text" id="category" v-model="newItem.category"></label>
+            <br>
+            <label for="deadline">締め切り<input type="text" id="deadline" v-model="newItem.deadline"></label>
+            <br>
+            <button @click="addItem">Add</button>
+            <h2>未完了のタスク</h2>
+            <ul>
+                <template v-for="(item, index) in items" :key="index">
+                    <li :class="{'isDone': item.isDone}"><label><input type="checkbox" v-model="item.isDone"
+                                @change="updateStorage(); completeItem()">{{ item.name }} |
+                            {{ item.category }} |
+                            {{ item.deadline }}</label></li>
+                </template>
+            </ul>
+            <button v-on:click="deleteItemChecked()">チェック済みの項目を削除する</button>
+            <button @click="resetStorage()">localStorageリセット</button>
+            <pre>{{$data}}</pre>
+
+            <h2>完了済みのタスク</h2>
+            <ul>
+                <template v-for="(completedItem, index) in completedItems" :key="index">
+                    <li :class="{'isDone': completedItem.isDone}"><label><input type="checkbox"
+                                v-model="completedItem.isDone" @change="updateStorage()">{{ completedItem.name }} |
+                            {{ completedItem.category }} |
+                            {{ completedItem.deadline }}</label></li>
+                </template>
+            </ul>
+
+        </form>
+    </div>
+</template>
