@@ -7,64 +7,64 @@ export default {
         const completedItems = reactive<{CompletedItem: Array}>([]);
 
         const addItem = () => {
-            if (this.newItem.name == null) return;
+            if (newItem.name == null) return;
             // オブジェクトをプッシュするときは変数に入れるとスッキリする
             let item = {
-                name: this.newItem.name,
-                category: this.newItem.category,
-                deadline: this.newItem.deadline,
+                name: newItem.name,
+                category: newItem.category,
+                deadline: newItem.deadline,
                 isDone: false
             };
 
-            this.items.push(item);
-            console.log(this.items);
-            // this.updateStorage();
+            items.push(item);
+            console.log(items);
+            // updateStorage();
             console.log(localStorage);
-            this.newItem.name = null;
-            this.newItem.category = null;
-            this.newItem.deadline = null;
-            this.updateStorage();
-            // this.fetchItem();
+            newItem.name = null;
+            newItem.category = null;
+            newItem.deadline = null;
+            updateStorage();
+            // fetchItem();
         }
 
         const fetchItem = () => {
             console.log('fetchItem');
             console.log(localStorage.length);
             // ローカルストレージからアイテムをフェッチする関数
-            this.items = JSON.parse(localStorage.getItem('items'));
-            this.completedItems = JSON.parse(localStorage.getItem('completedItems'));
-            if (!this.items) {
-                this.items = [];
+            items = JSON.parse(localStorage.getItem('items'));
+            completedItems = JSON.parse(localStorage.getItem('completedItems'));
+            if (!items) {
+                items = [];
             }
-            if (!this.completedItems) {
-                this.completedItems = [];
+            if (!completedItems) {
+                completedItems = [];
             }
         }
 
         const resetStorage = () => {
             localStorage.clear();
-            this.fetchItem();
+            fetchItem();
         }
 
         const updateStorage = () => {
             console.log('updateStorage');
-            localStorage.setItem('items', JSON.stringify(this.items));
-            localStorage.setItem('completedItems', JSON.stringify(this.completedItems));
+            localStorage.setItem('items', JSON.stringify(items));
+            localStorage.setItem('completedItems', JSON.stringify(completedItems));
         }
 
         const deleteItemChecked = () => {
             // isDoneがtrueのものだけがreturn trueされ、新たな配列として格納される
-            this.items = this.items.filter(function (item) {
+            items = items.filter(function (item) {
                 return item.isDone === false;
             });
         }
 
         const completeItem = () => {
-            let completedItems = this.items.filter(function (item) {
+            let completedItems = items.filter(function (item) {
                 return item.isDone === true;
             });
-            this.completedItems.push(...completedItems);
-            this.deleteItemChecked();
+            completedItems.push(...completedItems);
+            deleteItemChecked();
         }
 
         return {newItem, items, completedItems, addItem, fetchItem,resetStorage, updateStorage, deleteItemChecked, completeItem};
