@@ -2,14 +2,19 @@
 import { reactive } from 'vue';
 export default {
     setup() {
-        const newItem = reactive<{ NewItem: Object }>([{name: null},{category: null}, {deadline: null}]);
-        const items = reactive<{Item: Array}>([]);
-        const completedItems = reactive<{CompletedItem: Array}>([]);
+        // const newItem = reactive<{ NewItem: Object }>([{name: null},{category: null}, {deadline: null}]);
+        const newItem = reactive({
+            name: "",
+            category: "",
+            deadline: ""
+        });
+        let items: object[] = reactive([]);
+        let completedItems = reactive([]);
 
         const addItem = () => {
             if (newItem.name == null) return;
             // オブジェクトをプッシュするときは変数に入れるとスッキリする
-            let item = {
+            let item: object = {
                 name: newItem.name,
                 category: newItem.category,
                 deadline: newItem.deadline,
@@ -20,9 +25,9 @@ export default {
             console.log(items);
             // updateStorage();
             console.log(localStorage);
-            newItem.name = null;
-            newItem.category = null;
-            newItem.deadline = null;
+            newItem.name = "";
+            newItem.category = "";
+            newItem.deadline = "";
             updateStorage();
             // fetchItem();
         }
@@ -31,8 +36,8 @@ export default {
             console.log('fetchItem');
             console.log(localStorage.length);
             // ローカルストレージからアイテムをフェッチする関数
-            items = JSON.parse(localStorage.getItem('items'));
-            completedItems = JSON.parse(localStorage.getItem('completedItems'));
+            items = JSON.parse(localStorage['items']);
+            completedItems = JSON.parse(localStorage['completedItems']);
             if (!items) {
                 items = [];
             }
